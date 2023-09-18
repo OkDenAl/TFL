@@ -7,7 +7,7 @@
 
 class Letter {
     friend void createSmt2File(std::unordered_map<char,Letter>& letters,std::unordered_map<std::string,
-                               Letter>& compositions,std::vector<std::string>& order);
+            Letter>& compositions,std::vector<std::string>& order, std::ifstream& smt2Template);
     friend void compareRules(Letter& LHS, Letter& RHS, std::ofstream& out);
 private:
     std::string name;
@@ -143,12 +143,16 @@ void compareRules(Letter& LHS, Letter& RHS, std::ofstream& out) {
 }
 
 void createSmt2File(std::unordered_map<char,Letter>& letters,std::unordered_map<std::string,
-                    Letter>& compositions,std::vector<std::string>& order) {
-    std::ofstream out;
-    out.open("solver.smt2");
+                    Letter>& compositions,std::vector<std::string>& order, std::ifstream& smt2Template) {
+    std::ofstream out ("solver.smt2");
     if (out.is_open())
     {
-        out << "(set-logic QF_NIA)\n\n";
+
+        std::string lineFromTemlate;
+        std::getline(smt2Template, lineFromTemlate);
+        out << lineFromTemlate;
+        std::getline(smt2Template, lineFromTemlate);
+
         for (auto & letter : letters){
             for (const auto & coef : letter.second.xCoef){
                 out << "(declare-fun " + coef + " () Int)\n";
@@ -165,8 +169,10 @@ void createSmt2File(std::unordered_map<char,Letter>& letters,std::unordered_map<
             compareRules(compositions[order[i]],compositions[order[i+1]],out);
         }
 
-        out << "(check-sat)\n";
-        out << "(get-model)\n";
+        std::getline(smt2Template, lineFromTemlate);
+        out << lineFromTemlate;
+        std::getline(smt2Template, lineFromTemlate);
+        out << lineFromTemlate;
     } else {
         std::cout<<"Cant open output file\n";
         return;
@@ -210,6 +216,7 @@ void parseStrings(std::unordered_map<char,Letter>& letters,std::unordered_map<st
         std::cout<<"Cant open input file\n";
         return;
     }
+    infile.close();
 }
 
 
@@ -224,8 +231,11 @@ int main(int argc, char* argv[]) {
     std::unordered_map<char,Letter> letters;
     std::unordered_map<std::string,Letter> compositions;
     std::vector<std::string> order;
+    std::ifstream smt2Template("template.smt2");
 
-    parseStrings(letters,compositions, order,"rules.txt");
-    createSmt2File(letters, compositions,order);
+    parseStrings(letters,compositions, order, filename);
+    createSmt2File(letters, compositions,order,smt2Template);
+
+    smt2Template.close();
     return 0;
 }

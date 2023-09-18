@@ -9,4 +9,4 @@ build-project:
 
 #Spec your input SRS here
 run:
-	./build/lab1 ./tests/test3.txt
+	./build/lab1
