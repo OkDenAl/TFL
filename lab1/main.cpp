@@ -231,11 +231,12 @@ int main(int argc, char* argv[]) {
     std::unordered_map<char,Letter> letters;
     std::unordered_map<std::string,Letter> compositions;
     std::vector<std::string> order;
-    std::ifstream smt2Template("template.smt2");
 
     parseStrings(letters,compositions, order, filename);
-    createSmt2File(letters, compositions,order,smt2Template);
 
+    std::ifstream smt2Template("template.smt2.example");
+    createSmt2File(letters, compositions,order,smt2Template);
     smt2Template.close();
+
     return 0;
 }
