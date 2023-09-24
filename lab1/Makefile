@@ -10,3 +10,4 @@ build-project:
 #Spec your input SRS here
 run:
 	./build/lab1
+
