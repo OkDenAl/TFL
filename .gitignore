@@ -34,3 +34,4 @@
 build
 *.smt2
 .idea
+cmake-build-debug
