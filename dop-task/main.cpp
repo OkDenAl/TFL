@@ -3,7 +3,7 @@
 #include <iostream>
 #include <memory>
 
-class string
+class string // ошибка на строке 28 фиксится тем, что сюда нужно добавить;
 
 class RegexGenerator {
     friend class StringGenerator;
@@ -27,7 +27,7 @@ public:
     RegexGenerator(int lettersNum, int starNesting,int lookaheadNum, int lookbehindNum,int alphabetSize, bool needRestrictionsForLookbehind=true);
 };
 
-RegexGenerator::RegexGenerator():
+RegexGenerator::RegexGenerator(): // ошибки на строках 31,32,33 фиксится тем, что нужно убрать вот эту строку
 RegexGenerator::RegexGenerator(int lettersNum, int starNesting,int lookaheadNum,
                                int lookbehindNum,int alphabetSize,bool needRestrictionsForLookbehind)
         :lettersNum(lettersNum),starNesting(starNesting),lookaheadNum(lookaheadNum),
@@ -49,7 +49,10 @@ class Test;
 
 class Testing
 {
-    std::unique_ptr<Test> pImpl;
+    std::unique_ptr<Test> pImpl; // ошибка
+    // /usr/include/c++/9/bits/unique_ptr.h:79:16: error:
+    // invalid application of ‘sizeof’ to incomplete type ‘Test’
+    // фиксится тем, что тут необходимо использовать shared_pointer
 public:
     Testing()=default;
 };
